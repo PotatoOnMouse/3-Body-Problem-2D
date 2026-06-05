@@ -16,13 +16,15 @@ public class ManagerScript : MonoBehaviour
     private void Start()
     {
         cam.orthographic = true;
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
     }
 
     private void Update()
     {
         if(cam.orthographicSize >= 0)
         {
-            cam.orthographicSize += Input.mouseScrollDelta.y * camScroll;
+            cam.orthographicSize -= Input.mouseScrollDelta.y * camScroll;
         }else
         {
             cam.orthographicSize = 0;
@@ -33,7 +35,8 @@ public class ManagerScript : MonoBehaviour
 
     private IEnumerator Spawn()
     {
-        GameObject bodySpawn = Instantiate(bodyPrefab, Input.mousePosition, Quaternion.identity);
+        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        GameObject bodySpawn = Instantiate(bodyPrefab, pos, Quaternion.identity);
         float size = bodySpawn.transform.localScale.x;
         while (Input.GetMouseButton(0))
         {
@@ -42,5 +45,6 @@ public class ManagerScript : MonoBehaviour
             rb.mass = Mathf.Pow(bodySpawn.transform.localScale.x / size, 3);
             yield return null;
         }
+        bodySpawn.GetComponent<GravityScript>().grav = true;
     }
 }
