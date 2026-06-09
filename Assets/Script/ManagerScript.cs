@@ -11,6 +11,7 @@ public class ManagerScript : MonoBehaviour
 
     [Header("Body")]
     [SerializeField] private GameObject bodyPrefab;
+    [SerializeField] private GameObject fakebodyPrefab;
     [SerializeField] private float bodySizeMult;
 
     private void Start()
@@ -31,20 +32,33 @@ public class ManagerScript : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0))
             StartCoroutine(Spawn());
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            GameObject[] gravObjects = GameObject.FindGameObjectsWithTag("body");
+            foreach(GameObject gravObject in gravObjects)
+            {
+                GravityScript gravityScript = gameObject.GetComponent<GravityScript>();
+                gravityScript.grav = !gravityScript.grav;
+            }
+        }
     }
 
     private IEnumerator Spawn()
     {
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GameObject bodySpawn = Instantiate(bodyPrefab, pos, Quaternion.identity);
-        float size = bodySpawn.transform.localScale.x;
+        GameObject fakebodySpawn = Instantiate(fakebodyPrefab, pos, Quaternion.identity);
+        float size = fakebodySpawn.transform.localScale.x;
         while (Input.GetMouseButton(0))
         {
-            bodySpawn.transform.localScale += Vector3.one * bodySizeMult;
-            Rigidbody2D rb = bodySpawn.GetComponent<Rigidbody2D>();
-            rb.mass = Mathf.Pow(bodySpawn.transform.localScale.x / size, 3);
+            fakebodySpawn.transform.localScale += Vector3.one * bodySizeMult;
+            Rigidbody2D rb = fakebodySpawn.GetComponent<Rigidbody2D>();
+            rb.mass = Mathf.Pow(fakebodySpawn.transform.localScale.x / size, 3);//kitne times increase hua h uska cube
             yield return null;
         }
+        GameObject bodySpawn = Instantiate(bodyPrefab, pos, Quaternion.identity);
+        bodySpawn.GetComponent<Rigidbody2D>().mass = fakebodySpawn.GetComponent<Rigidbody2D>().mass;
+        bodySpawn.transform.localScale = fakebodySpawn.transform.localScale;
         bodySpawn.GetComponent<GravityScript>().grav = true;
     }
 }

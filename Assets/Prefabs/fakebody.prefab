@@ -12,11 +12,9 @@ GameObject:
   - component: {fileID: 3971616214897962336}
   - component: {fileID: 7287522511444523861}
   - component: {fileID: 8576800349301987569}
-  - component: {fileID: -8652455782476195622}
-  - component: {fileID: -7438982026890830727}
   m_Layer: 0
-  m_Name: body
-  m_TagString: body
+  m_Name: fakebody
+  m_TagString: fake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,28 +156,3 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &-8652455782476195622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049823899512669280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd83504a5a9ce947ba60c49d32fcfdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GravityScript
-  grav: 0
---- !u!114 &-7438982026890830727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049823899512669280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d44590a8e501fe48951b16aa90a456e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CollisionCombineScript
