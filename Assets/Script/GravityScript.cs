@@ -10,7 +10,7 @@ public class GravityScript : MonoBehaviour
         grav = false; 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if(grav == true)
             Gravity();
@@ -18,7 +18,6 @@ public class GravityScript : MonoBehaviour
 
     private void Gravity()
     {
-        //force = Vector3.zero;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         GameObject[] b = GameObject.FindGameObjectsWithTag("body");
         foreach (GameObject a in b)
