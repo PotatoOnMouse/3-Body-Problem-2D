@@ -14,7 +14,7 @@ public class ManagerScript : MonoBehaviour
     [SerializeField] private GameObject fakebodyPrefab;
     [SerializeField] private float bodySizeMult;
     [SerializeField] private bool settingVelocity;
-    
+    public float velocity;
 
     private void Start()
     {
@@ -35,16 +35,6 @@ public class ManagerScript : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0) && !settingVelocity)
             StartCoroutine(Spawn());
-
-        //if(Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    GameObject[] gravObjects = GameObject.FindGameObjectsWithTag("body");
-        //    foreach(GameObject gravObject in gravObjects)
-        //    {
-        //        GravityScript gravityScript = gameObject.GetComponent<GravityScript>();
-        //        gravityScript.grav = !gravityScript.grav;
-        //    }
-        //}
     }
 
     private IEnumerator Spawn()
@@ -60,24 +50,31 @@ public class ManagerScript : MonoBehaviour
             yield return null;
         }
         GameObject bodySpawn = Instantiate(bodyPrefab, pos, Quaternion.identity);
-        bodySpawn.GetComponent<Rigidbody2D>().mass = fakebodySpawn.GetComponent<Rigidbody2D>().mass;
+        bodySpawn.GetComponent<Rigidbody2D>().mass = 0f;
+        float massVar = fakebodySpawn.GetComponent<Rigidbody2D>().mass;
         bodySpawn.transform.localScale = fakebodySpawn.transform.localScale;
         Destroy(fakebodySpawn);
         yield return null;
-        Velocity(bodySpawn);//saara ek saath cahl rha h isme to if statement caheck nhi ho rhi theek kr liyo main chala forza farm krne
-        yield return null;
+        yield return StartCoroutine(Velocity(bodySpawn));
+        bodySpawn.GetComponent<Rigidbody2D>().mass = massVar;
         bodySpawn.GetComponent<GravityScript>().grav = true;
     }
 
-    private void Velocity(GameObject body)
+    private IEnumerator Velocity(GameObject body)
     {
         settingVelocity = true;
-        Vector3 push = Camera.main.ScreenToWorldPoint(Input.mousePosition) - body.transform.position;
-        push.Normalize();
-        if (Input.GetMouseButton(0) && settingVelocity)
+        bool parameter = true;
+        while(parameter)
         {
-            body.GetComponent<Rigidbody2D>().AddForce(push * 10, ForceMode2D.Impulse);
-            settingVelocity = false;
+            if (Input.GetMouseButton(0) && settingVelocity)
+            {
+                Vector3 push = Camera.main.ScreenToWorldPoint(Input.mousePosition) - body.transform.position;
+                push.Normalize();
+                body.GetComponent<Rigidbody2D>().linearVelocity = push * velocity;
+                settingVelocity = false;
+                parameter = false;
+            }
+            yield return null;
         }
     }
 }
